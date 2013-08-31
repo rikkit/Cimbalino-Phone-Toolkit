@@ -17,6 +17,7 @@ using System;
 using System.ComponentModel;
 using System.Windows;
 using Microsoft.Phone.Controls;
+using Microsoft.Xna.Framework;
 
 namespace Cimbalino.Phone.Toolkit.Behaviors
 {
@@ -109,6 +110,36 @@ namespace Cimbalino.Phone.Toolkit.Behaviors
             DependencyProperty.Register("Visible", typeof(bool), typeof(MultiApplicationBarBehavior), new PropertyMetadata(true, OnIsVisibleChanged));
 
         /// <summary>
+        /// Sets the background colour of every contained Application Bar.
+        /// </summary>
+        public System.Windows.Media.Color BackgroundColor
+        {
+            get { return (System.Windows.Media.Color)GetValue(BackgroundColorProperty); }
+            set { SetValue(BackgroundColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifier for the <see cref="BackgroundColor"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty BackgroundColorProperty =
+            DependencyProperty.Register("BackgroundColor", typeof (System.Windows.Media.Color), typeof (MultiApplicationBarBehavior), new PropertyMetadata(default(System.Windows.Media.Color)));
+        
+        /// <summary>
+        /// Sets the foreground colour of every contained Application Bar.
+        /// </summary>
+        public System.Windows.Media.Color ForegroundColor
+        {
+            get { return (System.Windows.Media.Color)GetValue(ForegroundColorProperty); }
+            set { SetValue(ForegroundColorProperty, value); }
+        }
+
+        /// <summary>
+        /// Identifier for the <see cref="ForegroundColor"/> dependency property.
+        /// </summary>
+        public static readonly DependencyProperty ForegroundColorProperty =
+            DependencyProperty.Register("ForegroundColor", typeof(System.Windows.Media.Color), typeof(MultiApplicationBarBehavior), new PropertyMetadata(default(System.Windows.Media.Color)));
+        
+        /// <summary>
         /// The selected application bar.
         /// </summary>
         public ApplicationBar SelectedItem
@@ -119,7 +150,9 @@ namespace Cimbalino.Phone.Toolkit.Behaviors
 
                 if (IsVisible && selectedIndex >= 0 && selectedIndex <= ApplicationBars.Count - 1)
                 {
-                    return ApplicationBars[selectedIndex];
+                    var applicationBar = ApplicationBars[selectedIndex];
+
+                    return applicationBar;
                 }
                 else
                 {
@@ -173,6 +206,16 @@ namespace Cimbalino.Phone.Toolkit.Behaviors
                 var internalApplicationBar = applicationBar.InternalApplicationBar;
 
                 internalApplicationBar.IsVisible = applicationBar.IsVisible;
+                
+                if (BackgroundColor != default(System.Windows.Media.Color))
+                {
+                    internalApplicationBar.BackgroundColor = BackgroundColor;
+                }
+
+                if (ForegroundColor != default(System.Windows.Media.Color))
+                {
+                    internalApplicationBar.ForegroundColor = ForegroundColor;
+                }
 
                 page.ApplicationBar = internalApplicationBar;
             }
